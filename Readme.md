@@ -1,3 +1,22 @@
-- 1  array 
-	- 快慢指针 
-        [removeDuplicates](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/)
+- 1  array 	
+   - 快慢指针 
+     删除重复元素
+   - 双指针，左右夹逼 
+     - kSum 问题总结
+     
+     ```
+     对于 kSum 这类问题，
+     
+     如果求的是具体的位置，就不能 sort，因为排序后位置信息就丢失了
+     如果求位置，用 HashMap, 求组合本身，用 HashSet 就足够了
+     如果求的是组合本身且 k>2, 无论如何，先排序，然后再考虑用双指针或者 HashSet
+     twoSumII()可以作为一个通用的底层函数，它往往有两种实现，双指针或者 HashSet(HashMap)
+     twoSumII()的 HashSet 实现，比较直观的是两次遍历，可以优化成单次遍历。
+     2Sum求的是位置，因此不能 sort。用两轮循环暴力搜索，时间复杂度O(n^2), 空间复杂度 O(1)；如果用一个 HashMap 来缓存位置，时间复杂度可以降低到 O(n)，代价是空间复杂度变为 O(n)。
+     
+     2Sum II求的是组合本身，nums数组已排好序，因此就不必再排序了，直接用双指针左右夹逼，时间复杂度 O(n)，空间复杂度 O(1)；也可以用 HashSet，时间复杂度 O(n)，空间复杂度 O(n)，并没有比双指针快，却更占内存。因此这题最佳方法是双指针。
+     
+     3Sum求的是组合本身且 k>2, 先排序，然后用双指针或者 HashSet 两种方法都可以。
+     
+     4Sum求的是组合本身且 k>2, 先排序，然后用双指针或者 HashSet 两种方法都可以。
+     ```
