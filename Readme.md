@@ -20,3 +20,8 @@
      
      4Sum求的是组合本身且 k>2, 先排序，然后用双指针或者 HashSet 两种方法都可以。
      ```
+- 2 linked list
+
+- 3 binary tree
+
+- 4 graph
