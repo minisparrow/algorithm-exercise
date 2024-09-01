@@ -1,4 +1,6 @@
 #include <iostream>
+using namespace std;
+
 // Definition for singly-linked list.
 struct ListNode {
   int val;
@@ -33,16 +35,19 @@ public:
     }
     return prev; // 注意这里返回的应该是prev而不是curr,此时curr是空指针。
   }
+
+  void printListNode(ListNode *head) {
+    ListNode *curr = head;
+    while (curr) {
+      cout << curr->val << "->";
+      curr = curr->next;
+    }
+    cout << "nullptr" << endl;
+  }
+
+  ListNode *head;
 };
 
-using namespace std;
-void printListNode(ListNode *head) {
-  ListNode *curr = head;
-  while (curr) {
-    cout << curr->val << endl;
-    curr = curr->next;
-  }
-}
 int main() {
   ListNode p1(1);
   ListNode p2(2);
@@ -54,9 +59,9 @@ int main() {
   p3.next = &p4;
   p4.next = &p5;
   Solution *sln = new Solution;
-  printListNode(&p1);
+  sln->printListNode(&p1);
   ListNode *reverse = sln->reverseList(&p1);
   cout << "after reverse:" << endl;
-  printListNode(reverse);
+  sln->printListNode(reverse);
   return 0;
 }
