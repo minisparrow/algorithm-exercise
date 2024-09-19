@@ -10,33 +10,26 @@ struct ListNode {
   ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
-// node
-// {val, next}->
-// {1, next}-> {2, next}-> {3, next} -> {4, next}->{5, next}
-// after reverse
-// {5, next}-> {4, next}-> {3, next} -> {2, next}->{1, next}
-//
-//             curr
-// curr->prev<--|---------->curr->next
-// {1, next}-> {2, next}-> {3, next} -> {4, next}->{5, next}
 class Solution {
 public:
   ListNode *reverseList(ListNode *head) {
-    ListNode *curr = head;
-    if (!curr)
+    if (head == nullptr)
       return nullptr;
     ListNode *prev = nullptr;
+    ListNode *curr = head;
     ListNode *next = curr->next;
-    while (curr) {       //
-      next = curr->next; // 保存下一个节点
-      curr->next = prev; // 更新当前节点的下一个节点（指向前一个节点）
-      prev = curr; // 更新下一个前向节点
-      curr = next; // 更新下一个当前节点
+    while (curr) {
+      // l1(1, next)->l2(2, next) -> l3(3, next) -> l4(4, next)
+      // -> l5(5, next) -> nullptr
+      next = curr->next;
+      curr->next = prev; // main body
+      // next iteration
+      prev = curr;
+      curr = next;
     }
-    return prev; // 注意这里返回的应该是prev而不是curr,此时curr是空指针。
+    return prev;
   }
-
-  void printListNode(ListNode *head) {
+  void printList(ListNode *head) {
     ListNode *curr = head;
     while (curr) {
       cout << curr->val << "->";
@@ -44,24 +37,26 @@ public:
     }
     cout << "nullptr" << endl;
   }
-
-  ListNode *head;
 };
 
-int main() {
-  ListNode p1(1);
-  ListNode p2(2);
-  ListNode p3(3);
-  ListNode p4(4);
-  ListNode p5(5);
-  p1.next = &p2;
-  p2.next = &p3;
-  p3.next = &p4;
-  p4.next = &p5;
+int main(int argc, char *argv[]) {
+  // l1(1, next)->l2(2, next) -> l3(3, next) -> l4(4, next)
+  // -> l5(5, next) -> nullptr
+  ListNode l1(1);
+  ListNode l2(2);
+  ListNode l3(3);
+  ListNode l4(4);
+  ListNode l5(5);
+  l1.next = &l2;
+  l2.next = &l3;
+  l3.next = &l4;
+  l4.next = &l5;
+  l5.next = nullptr;
   Solution *sln = new Solution;
-  sln->printListNode(&p1);
-  ListNode *reverse = sln->reverseList(&p1);
+  sln->printList(&l1);
+  ListNode *reverseList;
+  reverseList = sln->reverseList(&l1);
   cout << "after reverse:" << endl;
-  sln->printListNode(reverse);
+  sln->printList(reverseList);
   return 0;
 }
