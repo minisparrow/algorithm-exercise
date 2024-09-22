@@ -52,6 +52,8 @@ public:
 };
 
 // 1 -> 4 -> 3 -> 2 -> 5->2
+// 1 -> 4 -> 3 -> 2 -> 2->5 // this test will cause heap use after free issue in
+// leetcode if not add nullptr after rightnode->next
 int main() {
   ListNode l1(1);
   ListNode l2(4);
