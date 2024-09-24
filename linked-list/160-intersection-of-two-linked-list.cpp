@@ -1,63 +1,54 @@
 
-#include <iostream>
-#include <vector>
-#include <list>
-using namespace std;
 
-struct ListNode {
-  int val;
-  ListNode *next;
-  ListNode(int x): val(x), next(nullptr) {}
-};
-
+#include "utils/listnode-common.h"
 
 class Solution {
 public:
-    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        if(headA == nullptr || headB == nullptr) return nullptr;
-        ListNode *lista = headA;
-        ListNode *listb = headB;
-        while(lista != listb) {
-            lista = lista == nullptr ? headB : lista->next;
-            listb = listb == nullptr ? headA : listb->next;
-        }
+  ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+    //       a1 -> a2 -> c1 -> c2 -> c3
+    // b1 -> b2 -> b3 --
+    // a:  --o--|---o
+    // b:  ---o--|--o
+    // a: pa + c + pb
+    // b: pb + c + pa
 
-        return lista;
+    ListNode *pa = headA;
+    ListNode *pb = headB;
+    while (pa != pb) {
+      if (pa != nullptr)
+        pa = pa->next;
+      else
+        pa = headB;
+      if (pb != nullptr)
+        pb = pb->next;
+      else
+        pb = headA;
     }
+    return pa;
+  }
 };
 
-
-int main() {
-  // intersectVal = 8, listA = [4,1,8,4,5], listB = [5,6,1,8,4,5], skipA = 2, skipB = 3
-  ListNode *listA;
-  ListNode *listB;
-  ListNode *l1 = new ListNode(4);
-  ListNode *l2 = new ListNode(1);
-  ListNode *l3 = new ListNode(8);
-  ListNode *l4 = new ListNode(4);
-  ListNode *l5 = new ListNode(5);
-  listA = l1;
-  l1->next = l2;
-  l2->next = l3;
-  l3->next = l4;
-  l4->next = l5;
-
-  ListNode *p1 = new ListNode(5);
-  ListNode *p2 = new ListNode(6);
-  ListNode *p3 = new ListNode(1);
-  ListNode *p4 = new ListNode(8);
-  ListNode *p5 = new ListNode(4);
-  ListNode *p6 = new ListNode(5);
-
-  listB = p1;
-  p1->next = p2;
-  p2->next = p3;
-  p3->next = p4;
-  p4->next = p5;
-  p5->next = p6;
-
-  Solution *sln = new Solution();
-  ListNode *result = sln->getIntersectionNode(listA, listB);
-  cout << result->val << endl;
-
+int main(int argc, char *argv[]) {
+  ListNode *a1 = new ListNode(4);
+  ListNode *a2 = new ListNode(1);
+  ListNode *c1 = new ListNode(8);
+  ListNode *c2 = new ListNode(4);
+  ListNode *c3 = new ListNode(5);
+  ListNode *b1 = new ListNode(5);
+  ListNode *b2 = new ListNode(6);
+  ListNode *b3 = new ListNode(1);
+  a1->next = a2;
+  a2->next = c1;
+  c1->next = c2;
+  c2->next = c3;
+  b1->next = b2;
+  b2->next = b3;
+  b3->next = c1;
+  printList(a1);
+  printList(b1);
+  Solution *sln = new Solution;
+  ListNode *res;
+  res = sln->getIntersectionNode(a1, b1);
+  printList(res);
+  return 0;
 }
