@@ -91,6 +91,72 @@ public:
 
     return res;
   }
+  vector<int> inorderTraversalWithLabledStack(TreeNode *root) {
+    //        5
+    //       󰁂 󰁃
+    //      4   6
+    //     󰁂 󰁃
+    //    1   2
+    //   󰁂 󰁃
+    // null null
+    // inorder:  左 中 右
+    // stack push:  右 中 左
+    // 初始化的节点：白色，表示没访问过
+    // =====================================================================
+    // 3 operations:
+    // 1. pop:
+    // 2. white: push -> stack {右中左元素push到stack, 中间节点标记为black}
+    // 3. black，表示访问过，push_back -> vector
+    // =====================================================================
+    // init               | s: {5, white}
+    // s is not empty, while start
+    // pop                | s: {}                                          | 判断top, color = 5, white
+    // white -> push      | s: {6-white, 5-black, 4-white}
+    // pop                | s{6-white, 5-black,}                           | 判断top, color = 4, white
+    // white -> push      | s{6-white, 5-black, 2-white, 4-black, 1-white}
+    // pop                | s{6-white, 5-black, 2-white, 4-black}          | jude top, color = 1-white
+    // white -> push      | s{6-white, 5-black, 2-white, 4-black, 1-black}
+    // pop                | s{6-white, 5-black, 2-white, 4-black}          | top, color =  1-black
+    // black -> push_back | s{6-white, 5-black, 2-white, 4-black}          | res {1}
+    // pop                | s{6-white, 5-black, 2-white                    | top, color =  4-black
+    // black -> push_back | s{6-white, 5-black, 2-white                    | res {1, 4}
+    // pop                | s{6-white, 5-black},                           | top, color = 2-white
+    // white -> push      | s{6-white, 5-black, 2-black}
+    // pop                | s{6-white, 5-black                             | top, color = 2-black
+    // black -> push_back | s{6-white, 5-black                             | res {1, 4, 2}
+    // pop                | s{6-white,                                     | top, color = 5-black
+    // black -> push_back | s{6-white}                                     | res {1, 4, 2, 5}
+    // pop                | s {}                                           | top, color = 6-white
+    // white -> push      | s:{6-black}
+    // pop                | s{}                                            | top, color= 6-black
+    // black -> push_back | s {}                                           | res {1, 4, 2, 5, 6}
+    // s is empty, stop
+    // =====================================================================
+    if (!root)
+      return {};
+    vector<int> res;
+    enum Color { white = 0, black };
+    Color color;
+    TreeNode *top;
+    stack<std::pair<TreeNode *, Color>> stk;
+    stk.push(make_pair(root, white)); // init
+    while (!stk.empty()) {
+      // top, color = stk.top();
+      auto tops = stk.top();
+      top = tops.first;
+      color = tops.second;
+      stk.pop();
+      if (top)
+        if (color == white) {
+          stk.push({top->right, white});
+          stk.push({top, black});
+          stk.push({top->left, white});
+        } else {
+          res.push_back(top->val);
+        }
+    }
+    return res;
+  }
 };
 
 int main(int argc, char *argv[]) {
@@ -100,7 +166,9 @@ int main(int argc, char *argv[]) {
   t0->right = t1;
   t1->left = t2;
   Solution *sln = new Solution;
-  vector<int> res = sln->inorderTraversalWithStack(t0);
+  // vector<int> res = sln->inorderTraversal(t0);
+  // vector<int> res = sln->inorderTraversalWithStack(t0);
+  vector<int> res = sln->inorderTraversalWithLabledStack(t0);
   for (size_t i = 0; i < res.size(); i++) {
     cout << res[i] << " ";
   }
