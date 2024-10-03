@@ -41,13 +41,15 @@ template <typename T> TreeNode *buildTreeFromVector(vector<T> &arr) {
   while (i < arr.size()) {
     auto front = que.front();
     que.pop();
-    if (arr[i] != -1)
+    if (arr[i] != -1) {
       front->left = new TreeNode(arr[i]);
+      que.push(front->left);
+    }
     i++; // i = 2
-    if (arr[i] != -1)
+    if (arr[i] != -1) {
       front->right = new TreeNode(arr[i]);
-    que.push(front->left);
-    que.push(front->right);
+      que.push(front->right);
+    }
     i++;
   }
 
