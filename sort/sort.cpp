@@ -85,16 +85,75 @@ public:
     }
     return arr;
   }
+
+  // 4. mergeSort 归并排序  time: O(nlogn)  space: O(n)
+  // 合并两个有序子数组 arr[l..m] 和 arr[m+1..r]
+  vector<int> merge(vector<int> &arr, int l, int m, int r) {
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    // 临时数组
+    vector<int> L(n1), R(n2);
+
+    // 拷贝数据
+    for (int i = 0; i < n1; i++)
+      L[i] = arr[l + i];
+    for (int j = 0; j < n2; j++)
+      R[j] = arr[m + 1 + j];
+
+    // 合并
+    int i = 0, j = 0, k = l;
+    while (i < n1 && j < n2) {
+      if (L[i] <= R[j])
+        arr[k++] = L[i++];
+      else
+        arr[k++] = R[j++];
+    }
+
+    // 拷贝剩余元素
+    while (i < n1)
+      arr[k++] = L[i++];
+    while (j < n2)
+      arr[k++] = R[j++];
+
+    return arr;
+  }
+
+  // 归并排序主函数
+  vector<int> mergeSort(vector<int> &arr, int l, int r) {
+    if (l < r) {
+      int m = l + (r - l) / 2; // 避免溢出
+      mergeSort(arr, l, m);
+      mergeSort(arr, m + 1, r);
+      merge(arr, l, m, r);
+    }
+
+    return arr;
+  }
 };
 
-int main() {
-  Solution *sln = new Solution();
-  vector<int> arr{9, 10, 2, 1, 5};
-  vector<int> res = sln->bubbleSort(arr);
-  // vector<int> res = sln->insertSort(arr);
+void print(vector<int> &arr, string str) {
+  cout << str << ":" << endl;
   for (int i = 0; i < arr.size(); i++) {
     cout << arr[i] << " ";
   }
   cout << endl;
+}
+
+int main() {
+  Solution *sln = new Solution();
+  vector<int> arr{9, 10, 2, 1, 5};
+  vector<int> res;
+  res = sln->bubbleSort(arr);
+  print(res, "bubblesort");
+
+  res = sln->selectionSort(arr);
+  print(res, "selectionSort");
+
+  res = sln->insertSort(arr);
+  print(res, "insertSort");
+
+  res = sln->mergeSort(arr, 0, arr.size() - 1);
+  print(res, "mergeSort");
   return 0;
 }
