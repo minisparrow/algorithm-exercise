@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -130,6 +131,38 @@ public:
 
     return arr;
   }
+
+  //------------------------------
+  // 分区函数
+  int partition(vector<int> &arr, int low, int high) {
+    int pivot = arr[high]; // 选择最后一个元素作为基准
+    int i = low - 1;       // 小于 pivot 的区域边界
+
+    for (int j = low; j < high; j++) {
+      if (arr[j] <= pivot) {
+        i++;
+        swap(arr[i], arr[j]); // 把小的放到前面
+      }
+    }
+    swap(arr[i + 1], arr[high]); // 把 pivot 放到正确位置
+    return i + 1;
+  }
+
+  // 快速排序
+  vector<int> quickSort(vector<int> &arr, int low, int high) {
+    if (low < high) {
+      int pi = partition(arr, low, high);
+      quickSort(arr, low, pi - 1);
+      quickSort(arr, pi + 1, high);
+    }
+    return arr;
+  }
+
+  vector<int> heapSort(vector<int> &arr) {
+    make_heap(arr.begin(), arr.end());
+    sort_heap(arr.begin(), arr.end());
+    return arr;
+  }
 };
 
 void print(vector<int> &arr, string str) {
@@ -155,5 +188,11 @@ int main() {
 
   res = sln->mergeSort(arr, 0, arr.size() - 1);
   print(res, "mergeSort");
+
+  res = sln->quickSort(arr, 0, arr.size() - 1);
+  print(res, "quickSort");
+
+  res = sln->heapSort(arr);
+  print(res, "heapSort");
   return 0;
 }
